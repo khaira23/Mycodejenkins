@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+    environment {
+        name ="Harpreet"
+    }
+    parameters {
+        string(name:"person", defaultValue: "Khaira", description:"Who are you")
+        booleanParam(name:"IS Male", defaultValue: true, description:"")
+         choice(name:"City",choices:['Toronto','Vancovour','BC'], description:"")
+    }
+    stages {
+        stage('Run A Command') {
+            steps {
+                sh '''
+                date
+                pwd
+                ls
+                cal 2021
+                '''
+                 
+            }
+        }
+        stage('Environment Variable') {
+            environment {
+        username ="Harpreet"
+            }
+            steps {
+            sh    'echo "${BUILD_ID}"'
+             sh    'echo "${name}"'
+               sh    'echo "${username}"'
+                
+            }
+        }
+         stage('parameters') {
+            steps {
+                echo 'Deploy-Test'
+               sh   'echo "${person}"'
+            }
+        }
+    stage('Continue ?') {
+            input {
+                message "Should We continue"
+                ok "We should go "
+            }
+            steps {
+                echo 'Deploy-Prod'
+            }
+        }
+    stage('Deploy-Prod') {
+            steps {
+                echo 'Deploy-Prod'
+            }
+        }     
+    }
+post {
+    always {
+        echo "I will say hello always"
+    }
+
+    failure {
+        echo "Failed"
+    }
+
+    success {
+        echo "Success"
+    }
+
+    }
+    
+}
+
